@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Slot.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Backpack.tscn" type="PackedScene" id=2]
+[ext_resource path="res://sample_items/beretta.png" type="Texture" id=3]
+[ext_resource path="res://sample_items/Beretta.gd" type="Script" id=4]
+[ext_resource path="res://examples/Test.gd" type="Script" id=5]
+
+[sub_resource type="CapsuleShape2D" id=1]
+radius = 29.5472
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 130.606, 10 )
+
+[node name="Test" type="Node2D"]
+script = ExtResource( 5 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 196.769, 35.3177 )
+current = true
+
+[node name="Backpack" parent="." instance=ExtResource( 2 )]
+position = Vector2( 30.2723, -146.316 )
+DefinitionFilePath = "res://sample_inventory_definition.json"
+Name = "Inventory 1"
+SlotScene = ExtResource( 1 )
+
+[node name="Backpack2" parent="." instance=ExtResource( 2 )]
+position = Vector2( 329.631, -144.634 )
+DefinitionFilePath = "res://sample_inventory_definition.json"
+Name = "Inventory 2"
+Height = 4
+Width = 4
+SlotScene = ExtResource( 1 )
+
+[node name="Beretta" type="RigidBody2D" parent="."]
+position = Vector2( -206.86, 50 )
+gravity_scale = 10.0
+script = ExtResource( 4 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Beretta"]
+position = Vector2( 3.96851, -2.77795 )
+rotation = 2.07869
+shape = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="Beretta"]
+texture = ExtResource( 3 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2( -159.77, 250.587 )
+shape = SubResource( 2 )

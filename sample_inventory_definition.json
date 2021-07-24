@@ -1,0 +1,20 @@
+{
+    "beretta" : {
+        "height" : 1,
+        "width" : 1,
+        "max_stack_size" : 1,
+        "icon_path" : "res://sample_items/beretta64x64.png",
+        "params" :{}
+    },
+    "katana" :{
+        "height" : 1,
+        "width" : 3,
+        "max_stack_size" : 1,
+        "icon_path" : "res://sample_items/katana192x64.png",
+        "params" :{}
+    },
+    "bullet": {
+        "icon_path" : "res://sample_items/bullet64x64.png",
+        "max_stack_size" : 10
+    }
+}
