@@ -8,7 +8,7 @@ var daddy
 var is_free = true
 var left_mouse_pressed = false
 var _left_mouse_release_probe = false
-
+var _mouse_follow
 
 func _process(_delta):
 	if left_mouse_pressed:
@@ -42,11 +42,13 @@ func _gui_input(event):
 
 
 func _on_Slot_left_single_click():
-	if daddy.selected_stack:
+	if daddy.selected_stack:	# drop
 		add_stack(daddy.selected_stack)
 		daddy.selected_stack = []
-	elif stack:
+		daddy.icon = null
+	elif stack:		# take
 		daddy.selected_stack = stack
+		daddy.icon = get_node("TextureRect").texture
 		clear_stack()
-	
+
 

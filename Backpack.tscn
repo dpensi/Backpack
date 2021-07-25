@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Title.gd" type="Script" id=3]
+[ext_resource path="res://Title.gd" type="Script" id=1]
 [ext_resource path="res://Backpack.gd" type="Script" id=4]
 
 [node name="Backpack" type="Node2D"]
@@ -28,7 +28,7 @@ text = "Inventory Name
 "
 align = 1
 valign = 1
-script = ExtResource( 3 )
+script = ExtResource( 1 )
 
 [node name="GridContainer" type="GridContainer" parent="Inventory/VBoxContainer"]
 margin_top = 35.0

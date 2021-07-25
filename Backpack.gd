@@ -11,7 +11,7 @@ onready var grid = get_node("Inventory/VBoxContainer/GridContainer")
 
 func _ready():
 	grid.columns = Width
-	
+
 	var definitions = load_definition_from_json(DefinitionFilePath)
 	if not definitions:
 		push_error("failed to get inventory definition, exiting the game")
@@ -22,7 +22,7 @@ func _ready():
 	for _col in range(Width * Height):
 		var slot = SlotScene.instance()
 		slot.definitions = definitions
-		slot.daddy = self 
+		slot.daddy = get_parent()
 		grid.add_child(slot)
 
 func add_item(item):
