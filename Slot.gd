@@ -4,7 +4,6 @@ signal left_single_click # TODO add stack params to event
 
 var stack = []
 var definitions
-var daddy
 var is_free = true
 var left_mouse_pressed = false
 var _left_mouse_release_probe = false
@@ -29,7 +28,6 @@ func clear_stack():
 	
 func add_stack(new_stack):
 	if not stack:
-		print(new_stack)
 		get_node("TextureRect").texture = \
 				load(definitions[new_stack[0].item_id]["icon_path"])
 	
@@ -42,13 +40,13 @@ func _gui_input(event):
 
 
 func _on_Slot_left_single_click():
-	if daddy.selected_stack:	# drop
-		add_stack(daddy.selected_stack)
-		daddy.selected_stack = []
-		daddy.icon = null
+	if _backpackbus.selected_stack:	# drop
+		add_stack(_backpackbus.selected_stack)
+		_backpackbus.selected_stack = []
+		_backpackbus.icon = null
 	elif stack:		# take
-		daddy.selected_stack = stack
-		daddy.icon = get_node("TextureRect").texture
+		_backpackbus.selected_stack = stack
+		_backpackbus.icon = get_node("TextureRect").texture
 		clear_stack()
 
 

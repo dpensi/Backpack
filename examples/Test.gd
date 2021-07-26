@@ -1,6 +1,6 @@
 extends Node2D
 
-onready var inventory0 = get_node("BackpackBus/Backpack")
+onready var inventory0 = get_node("Backpack")
 # onready var inventory1 = get_node("Backpack3")
 onready var gun = get_node("Beretta")
 

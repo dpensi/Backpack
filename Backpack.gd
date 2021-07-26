@@ -22,7 +22,6 @@ func _ready():
 	for _col in range(Width * Height):
 		var slot = SlotScene.instance()
 		slot.definitions = definitions
-		slot.daddy = get_parent()
 		grid.add_child(slot)
 
 func add_item(item):
