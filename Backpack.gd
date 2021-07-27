@@ -1,27 +1,37 @@
 extends Node2D
 
+# Main class to access inventory functions
+
 export(String) var DefinitionFilePath = "res://inventory_definition.json"
 export(String) var Name = "Inventory Name"
-export(int) var Height = 3
 export(int) var Width = 3	
+export(int) var Height = 3
 export(PackedScene) var SlotScene
-
 var selected_stack = []
 onready var grid = get_node("Inventory/VBoxContainer/GridContainer")
 
 func _ready():
-	grid.columns = Width
-
+	# loading inventory definition from json file
 	var definitions = load_definition_from_json(DefinitionFilePath)
 	if not definitions:
 		push_error("failed to get inventory definition, exiting the game")
-		get_tree().quit()
+		get_tree().quit() # TODO provide a default definition?
 		return
-		
+	
+	# setting the inventory name
 	get_node("Inventory/VBoxContainer/Title").text = Name
+	
+	# setting the inventory XY grid
+	grid.columns = Width
+	var child_index = 0
 	for _col in range(Width * Height):
 		var slot = SlotScene.instance()
 		slot.definitions = definitions
+		slot.grid_position = Vector2(
+				child_index % Width,
+				child_index / Width
+		)
+		child_index += 1
 		grid.add_child(slot)
 
 func add_item(item):
@@ -35,8 +45,9 @@ func load_definition_from_json(file_path):
 	var file = File.new() 
 	var err = file.open(file_path, File.READ)
 	if err:
-		push_error("error opening dictionary, err no: {no}".format({"no":err}))
-		push_error("did you provide a valid DefinitionFilePath to {name}?".format({"name": name}))
+		var err_msg = "error opening dictionary, err no: {no}"
+		err_msg += ".did you provide a valid DefinitionFilePath to {name}?"
+		push_error(err_msg.format({"name": name, "no": err}))
 		return null
 		
 	var content = file.get_as_text()

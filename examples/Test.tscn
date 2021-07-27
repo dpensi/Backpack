@@ -58,6 +58,6 @@ SlotScene = ExtResource( 1 )
 position = Vector2( 329.631, -144.634 )
 DefinitionFilePath = "res://sample_inventory_definition.json"
 Name = "Inventory 2"
-Height = 4
 Width = 4
+Height = 5
 SlotScene = ExtResource( 1 )

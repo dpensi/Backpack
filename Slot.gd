@@ -1,13 +1,15 @@
 extends Panel
 
-signal left_single_click # TODO add stack params to event
+# Slot that stores item stacks
+
+signal left_single_click 
 
 var stack = []
 var definitions
-var is_free = true
+var grid_position
+var is_free = true # TODO
 var left_mouse_pressed = false
 var _left_mouse_release_probe = false
-var _mouse_follow
 
 func _process(_delta):
 	if left_mouse_pressed:
@@ -38,7 +40,6 @@ func _gui_input(event):
 		if event.button_index == BUTTON_LEFT:
 			left_mouse_pressed = event.pressed
 
-
 func _on_Slot_left_single_click():
 	if _backpackbus.selected_stack:	# drop
 		add_stack(_backpackbus.selected_stack)
@@ -49,4 +50,8 @@ func _on_Slot_left_single_click():
 		_backpackbus.icon = get_node("TextureRect").texture
 		clear_stack()
 
+func _on_Slot_mouse_entered():
+	print("mouse entered ", name, " ", grid_position)
 
+func _on_Slot_mouse_exited():
+	print("mouse exited ", name, " ", grid_position)

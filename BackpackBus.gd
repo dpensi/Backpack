@@ -1,5 +1,10 @@
 extends Node2D
 
+# Service class to allow communication (mainly items transfer between
+# more inventories). This class exists for technical reason and should
+# not be used directory. In order for Backpack to work you must autoload
+# this class as a singleton with name "_backpackbus"
+
 var selected_stack = []
 var icon = null
 var follow_mouse
