@@ -1,46 +1,50 @@
-extends Node2D
+extends Node
 
-# Main class to access inventory functions
+signal item_added(item, index)
 
-export(String) var DefinitionFilePath = "res://inventory_definition.json"
 export(String) var Name = "Inventory Name"
+export(String) var DefinitionFilePath = "res://inventory_definition.json"
 export(int) var Width = 3	
 export(int) var Height = 3
-export(PackedScene) var SlotScene
-var selected_stack = []
-onready var grid = get_node("Inventory/VBoxContainer/GridContainer")
+
+onready var grid = []
+
+var definitions
 
 func _ready():
 	# loading inventory definition from json file
-	var definitions = load_definition_from_json(DefinitionFilePath)
+	definitions = load_definition_from_json(DefinitionFilePath)
 	if not definitions:
 		push_error("failed to get inventory definition, exiting the game")
 		get_tree().quit() # TODO provide a default definition?
 		return
-	
-	# setting the inventory name
-	get_node("Inventory/VBoxContainer/Title").text = Name
-	
-	# setting the inventory XY grid
-	grid.columns = Width
-	var child_index = 0
-	for _col in range(Width * Height):
-		var slot = SlotScene.instance()
-		slot.definitions = definitions
-		slot.grid_position = Vector2(
-				child_index % Width,
-				child_index / Width
-		)
-		child_index += 1
-		grid.add_child(slot)
+	print(definitions)
 
+	# generate inventory grid
+	for i in Width * Height:
+		grid.append([])
+		
 func add_item(item):
-	for i in range(grid.get_child_count()):
-		var slot = grid.get_child(i)
-		if slot.is_free:
-			slot.add_item(item)
+	# TODO 
+	# 1. get item stack size from the definition
+	# 2. check item.id == stack[index].id
+	# 2.1. true: add to the stack
+	# 2.2 false: continue (next stack)
+	for i in len(grid):
+		if grid[i].size() == 0:
+			grid[i].append(item)
+			print("appended %s at position %d" % [definitions[item.item_id], i])
+			emit_signal("item_added", item, i)
 			break
-			
+
+func add_stack_to(stack, position):
+	grid[get_grid_index(position)].append_array(stack)
+	print(to_string())
+	
+func remove_stack_from(position):
+	grid[get_grid_index(position)] = []
+	print(to_string())
+	
 func load_definition_from_json(file_path):
 	var file = File.new() 
 	var err = file.open(file_path, File.READ)
@@ -49,7 +53,7 @@ func load_definition_from_json(file_path):
 		err_msg += ".did you provide a valid DefinitionFilePath to {name}?"
 		push_error(err_msg.format({"name": name, "no": err}))
 		return null
-		
+	
 	var content = file.get_as_text()
 	file.close()
 	
@@ -65,7 +69,22 @@ func load_definition_from_json(file_path):
 		return null
 	
 	return parsed.result
-	
-	
-	
-	
+
+func get_grid_position(index):
+	return Vector2(index % Width, index / Width)
+
+func get_grid_index(vec2):
+	return vec2.y * Width + vec2.x
+
+func to_string():
+	var print_value = ""
+	for index in Width * Height:
+		var cell = "[%d](%d,%d):%s\t"
+		print_value += cell % \
+			[index,
+			get_grid_position(index).x,  
+			get_grid_position(index).y,
+			grid[index]]
+		if index and not ((index+1) % Width):
+			print_value += "\n"
+	return print_value

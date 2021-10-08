@@ -3,6 +3,8 @@ extends Panel
 # Slot that stores item stacks
 
 signal left_single_click 
+signal stack_in(stack, grid_position)
+signal stack_out(grid_position)
 
 var stack = []
 var definitions
@@ -41,14 +43,16 @@ func _gui_input(event):
 			left_mouse_pressed = event.pressed
 
 func _on_Slot_left_single_click():
-	if _backpackbus.selected_stack:	# drop
+	if _backpackbus.selected_stack:	# drop, item on mouse
 		add_stack(_backpackbus.selected_stack)
 		_backpackbus.selected_stack = []
 		_backpackbus.icon = null
-	elif stack:		# take
+		emit_signal("stack_in", stack , grid_position)
+	elif stack:		# take, item on slot
 		_backpackbus.selected_stack = stack
 		_backpackbus.icon = get_node("TextureRect").texture
 		clear_stack()
+		emit_signal("stack_out", grid_position)
 
 func _on_Slot_mouse_entered():
 	print("mouse entered ", name, " ", grid_position)
