@@ -4,3 +4,4 @@
 
 [node name="Backpack" type="Node"]
 script = ExtResource( 1 )
+DefinitionFilePath = "res://sample_inventory_definition.json"

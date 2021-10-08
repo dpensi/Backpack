@@ -1,11 +1,11 @@
 [gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://Slot.tscn" type="PackedScene" id=1]
-[ext_resource path="res://BpView.tscn" type="PackedScene" id=2]
-[ext_resource path="res://sample_items/beretta.png" type="Texture" id=3]
-[ext_resource path="res://sample_items/Beretta.gd" type="Script" id=4]
-[ext_resource path="res://examples/Test.gd" type="Script" id=5]
-[ext_resource path="res://Backpack.tscn" type="PackedScene" id=6]
+[ext_resource path="../Slot.tscn" type="PackedScene" id=1]
+[ext_resource path="../sample_items/beretta.png" type="Texture" id=3]
+[ext_resource path="../sample_items/Beretta.gd" type="Script" id=4]
+[ext_resource path="Test.gd" type="Script" id=5]
+[ext_resource path="../Backpack.tscn" type="PackedScene" id=6]
+[ext_resource path="../BpView.tscn" type="PackedScene" id=7]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 29.5472
@@ -34,9 +34,10 @@ rotation = 2.07869
 shape = SubResource( 1 )
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2( -125.225, 119.681 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-position = Vector2( -159.77, 250.587 )
+position = Vector2( 0.884659, 6.21091 )
 shape = SubResource( 2 )
 
 [node name="TextureRect" type="TextureRect" parent="."]
@@ -49,27 +50,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Backpack" parent="." instance=ExtResource( 2 )]
-position = Vector2( 30.2723, -146.316 )
-DefinitionFilePath = "res://sample_inventory_definition.json"
-Name = "Inventory 1"
-SlotScene = ExtResource( 1 )
+[node name="Backpack1" parent="." instance=ExtResource( 6 )]
+Name = "backend1"
 
-[node name="Backpack2" parent="." instance=ExtResource( 2 )]
-position = Vector2( 329.631, -144.634 )
-DefinitionFilePath = "res://sample_inventory_definition.json"
-Name = "Inventory 2"
+[node name="Backpack2" parent="." instance=ExtResource( 6 )]
+Name = "backend2"
 Width = 4
-Height = 5
+Height = 4
+
+[node name="Backpack1View" parent="." instance=ExtResource( 7 )]
+position = Vector2( 216, -163.474 )
+BackEndPath = NodePath("../Backpack1")
 SlotScene = ExtResource( 1 )
 
-[node name="Equip" parent="." instance=ExtResource( 2 )]
-position = Vector2( 137.907, 154.725 )
-DefinitionFilePath = "res://sample_inventory_definition.json"
-Name = "Equip"
-Width = 2
-Height = 1
+[node name="Backpack2View" parent="." instance=ExtResource( 7 )]
+position = Vector2( 537.988, -170.529 )
+BackEndPath = NodePath("../Backpack2")
 SlotScene = ExtResource( 1 )
-
-[node name="Backpack3" parent="." instance=ExtResource( 6 )]
-Width = 6

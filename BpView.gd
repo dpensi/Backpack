@@ -3,69 +3,59 @@ extends Node2D
 # Main class to access inventory functions
 
 export(String) var DefinitionFilePath = "res://inventory_definition.json"
-export(String) var Name = "Inventory Name"
-export(int) var Width = 3	
-export(int) var Height = 3
+export(NodePath) var BackEndPath
 export(PackedScene) var SlotScene
+
+var width: int	
+var height: int
 var selected_stack = []
-onready var grid = get_node("Inventory/VBoxContainer/GridContainer")
+var definitions
+
+onready var grid 
+onready var backend 
 
 func _ready():
-	# loading inventory definition from json file
-	var definitions = load_definition_from_json(DefinitionFilePath)
-	if not definitions:
-		push_error("failed to get inventory definition, exiting the game")
-		get_tree().quit() # TODO provide a default definition?
-		return
+	grid = get_node("Inventory/VBoxContainer/GridContainer")
+	backend = get_node(BackEndPath)
+	# loading inventory definition from backend
+	definitions = backend.definitions
 	
 	# setting the inventory name
-	get_node("Inventory/VBoxContainer/Title").text = Name
+	get_node("Inventory/VBoxContainer/Title").text = backend.Name
+	
+	# connecting signals from backend
+	backend.connect("item_added", self, "on_item_added")
+	
+	# getting width and height from backend
+	width = backend.Width
+	height = backend.Height
 	
 	# setting the inventory XY grid
-	grid.columns = Width
+	grid.columns = width
 	var child_index = 0
-	for _col in range(Width * Height):
+	for _col in range(width * height):
 		var slot = SlotScene.instance()
 		slot.definitions = definitions
 		slot.grid_position = Vector2(
-				child_index % Width,
-				child_index / Width
+				child_index % width,
+				child_index / width
 		)
 		child_index += 1
+		slot.connect("stack_in", self, "on_Slot_stack_in")
+		slot.connect("stack_out", self, "on_Slot_stack_out")
 		grid.add_child(slot)
 
-func add_item(item):
-	for i in range(grid.get_child_count()):
-		var slot = grid.get_child(i)
-		if slot.is_free:
-			slot.add_item(item)
-			break
+func on_item_added(item, index):
+	var slot = grid.get_child(index)
+	if slot.is_free:
+		slot.add_item(item)
+		print("item added")
 			
-func load_definition_from_json(file_path):
-	var file = File.new() 
-	var err = file.open(file_path, File.READ)
-	if err:
-		var err_msg = "error opening dictionary, err no: {no}"
-		err_msg += ".did you provide a valid DefinitionFilePath to {name}?"
-		push_error(err_msg.format({"name": name, "no": err}))
-		return null
-		
-	var content = file.get_as_text()
-	file.close()
-	
-	var parsed = JSON.parse(content)
-	if parsed.error:
-		var format_error = "load_dictionary_from_json failure " 
-		format_error += "err no: {errno}, {errstring} at line: {errline}"
-		var error = format_error.format(
-			{"errno": str(parsed.error),
-			"errstring": str(parsed.error_string),
-			"errline": str(parsed.error_line)}) 
-		push_error(error)
-		return null
-	
-	return parsed.result
-	
+func on_Slot_stack_in(stack, grid_position):
+	backend.add_stack_to(stack, grid_position)
+
+func on_Slot_stack_out(grid_position):
+	backend.remove_stack_from(grid_position)
 	
 	
 	
