@@ -18,7 +18,6 @@ func _ready():
 		push_error("failed to get inventory definition, exiting the game")
 		get_tree().quit() # TODO provide a default definition?
 		return
-	print(definitions)
 
 	# generate inventory grid
 	for i in Width * Height:
