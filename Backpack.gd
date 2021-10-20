@@ -3,7 +3,7 @@ extends Node
 signal item_added(item, index)
 
 export(String) var Name = "Inventory Name"
-export(String) var DefinitionFilePath = "res://inventory_definition.json"
+export(String, FILE) var DefinitionFilePath = "res://inventory_definition.json"
 export(int) var Width = 3	
 export(int) var Height = 3
 
