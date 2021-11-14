@@ -35,7 +35,13 @@ func add_item(item):
 			print("appended %s at position %d" % [definitions[item.item_id], i])
 			emit_signal("item_added", item, i)
 			break
-
+			
+func get_item(position):
+	if position.x < Width and position.y < Height:
+		var stack_at_position = grid[get_grid_index(position)]
+		if stack_at_position:
+			return stack_at_position[0]
+	
 func add_stack_to(stack, position):
 	grid[get_grid_index(position)].append_array(stack)
 	print(to_string())
